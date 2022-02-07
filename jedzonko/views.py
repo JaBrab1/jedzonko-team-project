@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.shortcuts import render
 from django.views import View
-from jedzonko.models import Recipe
+from jedzonko.models import Recipe, Plan
 
 
 class IndexView(View):
@@ -14,7 +14,8 @@ class IndexView(View):
 class Dashboard(View):
     def get(self, request):
         recipes = Recipe.objects.all()
-        return render(request, "dashboard.html", {'recipes': recipes})
+        planes = Plan.objects.all()
+        return render(request, "dashboard.html", {'recipes': recipes, 'planes':planes})
 
 class RecipeID(View):
     def get(self, request):
