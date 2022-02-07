@@ -10,3 +10,8 @@ class Recipe(models.Model):
     updated = models.DateField(auto_now=timezone)
     preparation = models.IntegerField(null=False)
     votes = models.IntegerField(default=0)
+
+class Plan(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    created = models.DateField(auto_now_add=timezone)
