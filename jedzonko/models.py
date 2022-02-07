@@ -10,6 +10,11 @@ class Recipe(models.Model):
     updated = models.DateField(auto_now=timezone)
     preparation = models.IntegerField(null=False)
     votes = models.IntegerField(default=0)
+    method_of_preparation = models.TextField()
+
+    def __str__(self):
+        return self.name
+
 
 class Plan(models.Model):
     name = models.CharField(max_length=255)

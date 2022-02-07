@@ -1,6 +1,7 @@
 from datetime import datetime
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
+from django.http import HttpResponse
 import random
 from jedzonko.models import Recipe, Plan
 
@@ -17,7 +18,7 @@ class Dashboard(View):
     def get(self, request):
         recipes = Recipe.objects.all()
         planes = Plan.objects.all()
-        return render(request, "dashboard.html", {'recipes': recipes, 'planes':planes})
+        return render(request, "dashboard.html", {'recipes': recipes, 'planes': planes})
 
 
 class RecipeID(View):
@@ -33,6 +34,21 @@ class RecipeList(View):
 class RecipeAdd(View):
     def get(self, request):
         return render(request, "app-add-recipe.html")
+
+    def post(self, request):
+        name = request.POST['name']
+        description = request.POST["description"]
+        preparation = request.POST["preparation"]
+        method_of_preparation = request.POST["method_of_preparation"]
+        ingredients = request.POST["ingredients"]
+        Recipe.objects.create(
+            name=name,
+            description=description,
+            preparation=preparation,
+            method_of_preparation=method_of_preparation,
+            ingredients=ingredients
+        )
+        return redirect('/recipe/add/')
 
 
 class RecipeModify(View):
