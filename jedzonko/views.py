@@ -1,9 +1,11 @@
 from datetime import datetime
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from django.views import View
 from django.http import HttpResponse
+from django.contrib import messages
 import random
 from jedzonko.models import Recipe, Plan
+
 
 
 class IndexView(View):
@@ -41,14 +43,17 @@ class RecipeAdd(View):
         preparation = request.POST["preparation"]
         method_of_preparation = request.POST["method_of_preparation"]
         ingredients = request.POST["ingredients"]
-        Recipe.objects.create(
-            name=name,
-            description=description,
-            preparation=preparation,
-            method_of_preparation=method_of_preparation,
-            ingredients=ingredients
-        )
-        return redirect('/recipe/add/')
+        if name != "" and description != "" and preparation != "" and method_of_preparation != "" and ingredients != "":
+            Recipe.objects.create(
+                name=name,
+                description=description,
+                preparation=preparation,
+                method_of_preparation=method_of_preparation,
+                ingredients=ingredients
+            )
+            return redirect('/recipe/list/')
+        else:
+            return render(request, 'app-add-recipe.html', {'alert_flag': True})
 
 
 class RecipeModify(View):
