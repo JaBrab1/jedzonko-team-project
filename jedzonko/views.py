@@ -14,7 +14,7 @@ class IndexView(View):
 class Dashboard(View):
     def get(self, request):
         recipes = Recipe.objects.all()
-        return render(request, "dashboard.html", {'recipes':recipes})
+        return render(request, "dashboard.html", {'recipes': recipes})
 
 class RecipeID(View):
     def get(self, request):
