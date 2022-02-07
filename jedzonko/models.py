@@ -20,7 +20,7 @@ class Plan(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     created = models.DateField(auto_now_add=timezone)
-    recipes = models.ManyToManyField(Recipe, through=RecipePlan)
+    recipes = models.ManyToManyField(Recipe, through="RecipePlan")
 
 
 DAY = (
@@ -35,7 +35,7 @@ DAY = (
 
 
 class Dayname(models.Model):
-    name = models.ChoiceField(max_length=16, choices=DAY)
+    name = models.CharField(max_length=16, choices=DAY)
     order = models.IntegerField(unique=True)
 
 
