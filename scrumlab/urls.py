@@ -20,6 +20,7 @@ from jedzonko.views import IndexView, Dashboard
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', IndexView.as_view()),
+    path('', IndexView.as_view()),
     path('main/', Dashboard.as_view())
+
 ]
