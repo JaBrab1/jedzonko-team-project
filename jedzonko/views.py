@@ -4,7 +4,7 @@ from django.views import View
 from django.http import HttpResponse
 from django.contrib import messages
 import random
-from jedzonko.models import Recipe, Plan, Recipeplan, Dayname
+from jedzonko.models import Recipe, Plan, RecipePlan, Dayname
 from django.db.models import Count
 
 
@@ -22,7 +22,7 @@ class Dashboard(View):
         recipes = Recipe.objects.all()
         plans = Plan.objects.all().order_by('-created')
         plan = plans[0]
-        recipeplan = Recipeplan.objects.filter(plan_id=plan.id).order_by('order')
+        recipeplan = RecipePlan.objects.filter(plan_id=plan.id).order_by('order')
         daynames = Dayname.objects.filter(id__in=recipeplan.values('dayname_id')).order_by('order')
         return render(request, "dashboard.html", {'recipes': recipes, 'plans': plans, 'plan': plan, 'recipeplan': recipeplan, 'daynames': daynames})
 
@@ -69,7 +69,13 @@ class RecipeModify(View):
 class PlanID(View):
     def get(self, request, id):
         plan = Plan.objects.get(id=id)
-        return render(request, "app-details-schedules.html", {'plan':plan})
+        recipeplan = RecipePlan.objects.filter(plan_id=plan.id).order_by('order')
+        daynames = Dayname.objects.filter(id__in=recipeplan.values('dayname_id').order_by('order'))
+
+
+        description = Recipe.objects.filter()
+        return render(request, "app-details-schedules.html",
+                      {'plan':plan, 'daynames':daynames, 'recipeplan':recipeplan, 'description':description})
 
 
 class PlanAdd(View):
