@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.http import HttpResponse
 import random
-from jedzonko.models import Recipe, Plan
+from jedzonko.models import Recipe, Plan, Recipeplan, Dayname
+from django.db.models import Count
 
 
 class IndexView(View):
@@ -17,8 +18,11 @@ class IndexView(View):
 class Dashboard(View):
     def get(self, request):
         recipes = Recipe.objects.all()
-        planes = Plan.objects.all()
-        return render(request, "dashboard.html", {'recipes': recipes, 'planes': planes})
+        plans = Plan.objects.all().order_by('-created')
+        plan = plans[0]
+        recipeplan = Recipeplan.objects.filter(plan_id=plan.id).order_by('order')
+        daynames = Dayname.objects.filter(id__in=recipeplan.values('dayname_id')).order_by('order')
+        return render(request, "dashboard.html", {'recipes': recipes, 'plans': plans, 'plan': plan, 'recipeplan': recipeplan, 'daynames': daynames})
 
 
 class RecipeID(View):
