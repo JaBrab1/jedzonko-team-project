@@ -25,8 +25,9 @@ class Dashboard(View):
 
 
 class RecipeID(View):
-    def get(self, request):
-        return render(request, "app-recipe-details.html")
+    def get(self, request, id):
+        recipe = Recipe.objects.get(id=id)
+        return render(request, "app-recipe-details.html", {"recipe": recipe})
 
 
 class RecipeList(View):
