@@ -20,6 +20,7 @@ class Plan(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     created = models.DateField(auto_now_add=timezone)
+    recipes = models.ManyToManyField(Recipe, through="RecipePlan")
 
     def __str__(self):
         return self.name
@@ -41,9 +42,7 @@ class Dayname(models.Model):
     # Dayname.objects.create(name="Niedziela", order=7)
 
 
-
-
-class Recipeplan(models.Model):
+class RecipePlan(models.Model):
     meal_name = models.CharField(max_length=255)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
@@ -58,4 +57,4 @@ class Page(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     slug = models.SlugField(max_length=255)
-
+    day_name = models.ForeignKey(Dayname, on_delete=models.CASCADE)

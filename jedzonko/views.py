@@ -1,10 +1,12 @@
 from datetime import datetime
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from django.views import View
 from django.http import HttpResponse
+from django.contrib import messages
 import random
 from jedzonko.models import Recipe, Plan, Recipeplan, Dayname
 from django.db.models import Count
+
 
 
 class IndexView(View):
@@ -26,8 +28,9 @@ class Dashboard(View):
 
 
 class RecipeID(View):
-    def get(self, request):
-        return render(request, "app-recipe-details.html")
+    def get(self, request, id):
+        recipe = Recipe.objects.get(id=id)
+        return render(request, "app-recipe-details.html", {"recipe": recipe})
 
 
 class RecipeList(View):
@@ -40,19 +43,22 @@ class RecipeAdd(View):
         return render(request, "app-add-recipe.html")
 
     def post(self, request):
-        name = request.POST['name']
-        description = request.POST["description"]
-        preparation = request.POST["preparation"]
-        method_of_preparation = request.POST["method_of_preparation"]
-        ingredients = request.POST["ingredients"]
-        Recipe.objects.create(
-            name=name,
-            description=description,
-            preparation=preparation,
-            method_of_preparation=method_of_preparation,
-            ingredients=ingredients
-        )
-        return redirect('/recipe/add/')
+        name = request.POST.get('name')
+        description = request.POST.get("description")
+        preparation = request.POST.get("preparation")
+        method_of_preparation = request.POST.get("method_of_preparation")
+        ingredients = request.POST.get("ingredients")
+        if name != "" and description != "" and preparation != "" and method_of_preparation != "" and ingredients != "":
+            Recipe.objects.create(
+                name=name,
+                description=description,
+                preparation=preparation,
+                method_of_preparation=method_of_preparation,
+                ingredients=ingredients
+            )
+            return redirect('/recipe/list/')
+        else:
+            return render(request, 'app-add-recipe.html', {'alert_flag': True})
 
 
 class RecipeModify(View):
@@ -61,13 +67,23 @@ class RecipeModify(View):
 
 
 class PlanID(View):
-    def get(self, request):
-        return render(request, "app-details-schedules.html")
+    def get(self, request, id):
+        plan = Plan.objects.get(id=id)
+        return render(request, "app-details-schedules.html", {'plan':plan})
 
 
 class PlanAdd(View):
     def get(self, request):
         return render(request, "app-add-schedules.html")
+
+    def post(self, request):
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        if name != "" and description != "":
+            Plan.objects.create(name=name, description=description)
+            return redirect('/plan/<int:id>/details/')
+        else:
+            return render(request, 'app-add-schedules.html', {'alert_flag': True})
 
 
 class PlanAddRecipe(View):

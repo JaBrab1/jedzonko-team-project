@@ -102,7 +102,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -115,7 +115,7 @@ STATICFILES_DIRS = [
 ]
 
 try:
-    from scrumlab.local_settings import DATABASES
+    from scrumlab import DATABASES
 except ModuleNotFoundError:
     print("Brak konfiguracji bazy danych w pliku local_settings.py!")
     print("Uzupełnij dane i spróbuj ponownie!")
