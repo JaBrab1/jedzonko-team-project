@@ -7,7 +7,6 @@ import random
 from jedzonko.models import Recipe, Plan
 
 
-
 class IndexView(View):
     def get(self, request):
         recpies = list(Recipe.objects.all())
@@ -38,11 +37,11 @@ class RecipeAdd(View):
         return render(request, "app-add-recipe.html")
 
     def post(self, request):
-        name = request.POST['name']
-        description = request.POST["description"]
-        preparation = request.POST["preparation"]
-        method_of_preparation = request.POST["method_of_preparation"]
-        ingredients = request.POST["ingredients"]
+        name = request.POST.get('name')
+        description = request.POST.get("description")
+        preparation = request.POST.get("preparation")
+        method_of_preparation = request.POST.get("method_of_preparation")
+        ingredients = request.POST.get("ingredients")
         if name != "" and description != "" and preparation != "" and method_of_preparation != "" and ingredients != "":
             Recipe.objects.create(
                 name=name,
@@ -69,6 +68,15 @@ class PlanID(View):
 class PlanAdd(View):
     def get(self, request):
         return render(request, "app-add-schedules.html")
+
+    def post(self, request):
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        if name != "" and description != "":
+            Plan.objects.create(name=name, description=description)
+            return redirect('/plan/<int:id>/details/')
+        else:
+            return render(request, 'app-add-schedules.html', {'alert_flag': True})
 
 
 class PlanAddRecipe(View):
