@@ -4,8 +4,9 @@ from django.views import View
 from django.http import HttpResponse
 from django.contrib import messages
 import random
-from jedzonko.models import Recipe, Plan, Recipeplan, Dayname
+from jedzonko.models import Recipe, Plan, RecipePlan, Dayname
 from django.db.models import Count
+from django.core.paginator import Paginator
 
 
 
@@ -22,7 +23,7 @@ class Dashboard(View):
         recipes = Recipe.objects.all()
         plans = Plan.objects.all().order_by('-created')
         plan = plans[0]
-        recipeplan = Recipeplan.objects.filter(plan_id=plan.id).order_by('order')
+        recipeplan = RecipePlan.objects.filter(plan_id=plan.id).order_by('order')
         daynames = Dayname.objects.filter(id__in=recipeplan.values('dayname_id')).order_by('order')
         return render(request, "dashboard.html", {'recipes': recipes, 'plans': plans, 'plan': plan, 'recipeplan': recipeplan, 'daynames': daynames})
 
@@ -35,7 +36,11 @@ class RecipeID(View):
 
 class RecipeList(View):
     def get(self, request):
-        return render(request, "app-recipes.html")
+        recipe_list = Recipe.objects.all().order_by('-votes', '-created')
+        paginator = Paginator(recipe_list, 1)
+        page = request.GET.get('page')
+        recipes = paginator.get_page(page)
+        return render(request, "app-recipes.html", {'recipes': recipes})
 
 
 class RecipeAdd(View):
