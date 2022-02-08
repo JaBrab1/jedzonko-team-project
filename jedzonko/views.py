@@ -4,6 +4,8 @@ from django.views import View
 from django.http import HttpResponse
 from django.contrib import messages
 import random
+
+import jedzonko.models
 from jedzonko.models import Recipe, Plan
 
 
@@ -61,8 +63,9 @@ class RecipeModify(View):
 
 
 class PlanID(View):
-    def get(self, request):
-        return render(request, "app-details-schedules.html")
+    def get(self, request, id):
+        plan = Plan.objects.get(id=id)
+        return render(request, "app-details-schedules.html", {'plan':plan})
 
 
 class PlanAdd(View):
