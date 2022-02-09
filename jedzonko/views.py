@@ -74,7 +74,7 @@ class RecipeModify(View):
 class PlanID(View):
     def get(self, request, id):
         plan = Plan.objects.get(id=id)
-        return render(request, "app-details-schedules.html", {'plan':plan})
+        return render(request, "app-details-schedules.html", {'plan': plan})
 
 
 class PlanAdd(View):
@@ -89,6 +89,7 @@ class PlanAdd(View):
             return redirect(f'/plan/{plan.id}/details/')
         else:
             return render(request, 'app-add-schedules.html', {'alert_flag': True})
+
 
 class PlanAddRecipe(View):
     def get(self, request):
