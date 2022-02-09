@@ -58,5 +58,7 @@ class Page(models.Model):
     description = models.TextField()
     slug = models.SlugField(max_length=255)
 
+
     def __str__(self):
         return self.title + " " + self.description + " " + self.slug
+
