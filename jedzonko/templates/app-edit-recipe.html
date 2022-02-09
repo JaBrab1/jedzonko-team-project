@@ -57,6 +57,9 @@
     {{ recipe.ingredients }}
                                     </textarea>
             </div>
+            {% if alert_flag %}
+    <script>alert("Wypełnij poprawnie wszystkie pola")</script>
+    {% endif %}
         </div>
     </div>
 </form>
