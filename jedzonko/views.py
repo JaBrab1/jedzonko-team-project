@@ -37,7 +37,7 @@ class RecipeID(View):
 class RecipeList(View):
     def get(self, request):
         recipe_list = Recipe.objects.all().order_by('-votes', '-created')
-        paginator = Paginator(recipe_list, 1)
+        paginator = Paginator(recipe_list, 50)
         page = request.GET.get('page')
         recipes = paginator.get_page(page)
         return render(request, "app-recipes.html", {'recipes': recipes})
