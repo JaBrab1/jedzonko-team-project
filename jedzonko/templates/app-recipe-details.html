@@ -2,7 +2,8 @@
 {% block title %}{% endblock %}
 {% block content %}
 <div class="dashboard-content border-dashed p-3 m-4 view-height">
-
+<form method="post">
+    {% csrf_token %}
     <div class="mt-4 ml-4 mr-4">
         <div class="row border-bottom border-3">
             <div class="col"><h3 class="color-header text-uppercase">Szczegóły
@@ -36,6 +37,7 @@
                 <th scope="row" class="col-2">Liczba polubień</th>
                 <td class="col-7">
                     {{ recipe.votes }}
+                        <button name="vote" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4" value="1">Polub przepis</button> <button name="voteminus" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4" value="2">Nie lubie przepisu</button>
                 </td>
             </tr>
             </tbody>
@@ -57,7 +59,8 @@
                 <li>{{ recipe.ingredients }}</li>
             </ul>
         </div>
-
+    </div>
+</form>
     </div>
 </div>
 {% endblock content %}
