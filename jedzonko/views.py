@@ -33,6 +33,18 @@ class RecipeID(View):
         recipe = Recipe.objects.get(id=id)
         return render(request, "app-recipe-details.html", {"recipe": recipe})
 
+    def post(self, request, id):
+        if request.POST.get("vote") == "1":
+            vp = Recipe.objects.get(id=id)
+            vp.votes = vp.votes + 1
+            vp.save()
+            return redirect(f'/recipe/{vp.id}/')
+        elif request.POST.get("voteminus") == "2":
+            vm = Recipe.objects.get(id=id)
+            vm.votes = vm.votes - 1
+            vm.save()
+            return redirect(f'/recipe/{vm.id}/')
+
 
 class RecipeList(View):
     def get(self, request):
