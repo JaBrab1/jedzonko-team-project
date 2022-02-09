@@ -7,7 +7,7 @@ import random
 from jedzonko.models import Recipe, Plan, RecipePlan, Dayname
 from django.db.models import Count
 from django.core.paginator import Paginator
-
+from urllib.error import HTTPError
 
 
 class IndexView(View):
@@ -79,8 +79,29 @@ class RecipeAdd(View):
 
 
 class RecipeModify(View):
-    def get(self, request):
-        return render(request, "app-edit-recipe.html")
+    def get(self, request, id):
+        try:
+            Recipe.objects.get(id=id)
+        except HTTPError:
+            HTTPError.msg = 'Nie ma takiego przepisu'
+            return HttpResponse(HTTPError.msg)
+        recipe = Recipe.objects.get(id=id)
+        return render(request, "app-edit-recipe.html", {'recipe': recipe})
+
+    def post(self, request, id):
+        recipe = Recipe.objects.get(id=id)
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        preparation = request.POST.get('preparation')
+        method_of_preparation = request.POST.get('method_of_preparation')
+        ingredients = request.POST.get('ingredients')
+        recipe.name = name
+        recipe.description = description
+        recipe.preparation = preparation
+        recipe.method_of_preparation = method_of_preparation
+        recipe.ingredients = ingredients
+        recipe.save()
+        return redirect(f'/recipe/modify/{recipe.id}')
 
 
 class PlanID(View):
