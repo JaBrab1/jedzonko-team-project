@@ -86,7 +86,9 @@ class RecipeModify(View):
 class PlanID(View):
     def get(self, request, id):
         plan = Plan.objects.get(id=id)
-        return render(request, "app-details-schedules.html", {'plan': plan})
+        recipeplan = RecipePlan.objects.filter(plan_id=plan.id).order_by('order')
+        daynames = Dayname.objects.filter(id__in=recipeplan.values('dayname_id')).order_by('order')
+        return render(request, "app-details-schedules.html", {'plan': plan, 'recipeplan': recipeplan, 'daynames': daynames})
 
 
 class PlanAdd(View):
