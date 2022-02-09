@@ -37,7 +37,7 @@ class RecipeID(View):
 class RecipeList(View):
     def get(self, request):
         recipe_list = Recipe.objects.all().order_by('-votes', '-created')
-        paginator = Paginator(recipe_list, 1)
+        paginator = Paginator(recipe_list, 50)
         page = request.GET.get('page')
         recipes = paginator.get_page(page)
         return render(request, "app-recipes.html", {'recipes': recipes})
@@ -86,14 +86,37 @@ class PlanAdd(View):
         description = request.POST.get("description")
         if name != "" and description != "":
             Plan.objects.create(name=name, description=description)
-            return redirect('/plan/<int:id>/details/')
+            return redirect(f'/plan/{plan.id}/details/')
         else:
             return render(request, 'app-add-schedules.html', {'alert_flag': True})
 
-
 class PlanAddRecipe(View):
     def get(self, request):
-        return render(request, "app-schedules-meal-recipe.html")
+        plan = Plan.objects.all()
+        dayname = Dayname.objects.all()
+        recipe = Recipe.objects.all()
+        return render(request, "app-schedules-meal-recipe.html", {"plan": plan, "dayname": dayname, "recipe": recipe})
+
+    def post(self, request):
+        plan = request.POST.get("nameplan")
+        plandb = Plan.objects.get(name=plan)
+        plan_id = plandb.id
+        namemeals = request.POST.get("namemeal")
+        numbermeals = request.POST.get("numbermeal")
+        recipe = request.POST.get("recipe")
+        recipedb = Recipe.objects.get(name=recipe)
+        recipe_id = recipedb.id
+        day = request.POST.get("nameday")
+        daydb = Dayname.objects.get(name=day)
+        day_id = daydb.id
+        RecipePlan.objects.create(
+            plan_id=plan_id,
+            meal_name=namemeals,
+            order=numbermeals,
+            recipe_id=recipe_id,
+            dayname_id=day_id
+        )
+        return redirect(f'/plan/{plan_id}/')
 
 
 class PlanList(View):
