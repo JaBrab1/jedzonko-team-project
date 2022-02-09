@@ -95,13 +95,16 @@ class RecipeModify(View):
         preparation = request.POST.get('preparation')
         method_of_preparation = request.POST.get('method_of_preparation')
         ingredients = request.POST.get('ingredients')
-        recipe.name = name
-        recipe.description = description
-        recipe.preparation = preparation
-        recipe.method_of_preparation = method_of_preparation
-        recipe.ingredients = ingredients
-        recipe.save()
-        return redirect(f'/recipe/modify/{recipe.id}')
+        if name != "" and description != "" and preparation != "" and method_of_preparation != "" and ingredients != "":
+            recipe.name = name
+            recipe.description = description
+            recipe.preparation = preparation
+            recipe.method_of_preparation = method_of_preparation
+            recipe.ingredients = ingredients
+            recipe.save()
+            return redirect(f'/recipe/list/')
+        else:
+            return render(request, "app-edit-recipe.html", {'recipe': recipe, 'alert_flag': True})
 
 
 class PlanID(View):
