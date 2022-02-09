@@ -4,7 +4,7 @@ from django.views import View
 from django.http import HttpResponse
 from django.contrib import messages
 import random
-from jedzonko.models import Recipe, Plan, RecipePlan, Dayname
+from jedzonko.models import Recipe, Plan, RecipePlan, Dayname, Page
 from django.db.models import Count
 from django.core.paginator import Paginator
 from urllib.error import HTTPError
@@ -162,5 +162,15 @@ class PlanList(View):
         page = request.GET.get('page')
         plans = paginator.get_page(page)
         return render(request, "app-schedules.html", {'plans': plans})
+
+
+class ContactView(View):
+    def get(self, request):
+        if Page.objects.filter(slug="contact").exists():
+            slug = Page.objects.get(slug="contact")
+            ctx = {"actual_date": datetime.now(), "slug": slug}
+            return render(request, "contact.html", ctx)
+        else:
+            return redirect('/')
 
 
