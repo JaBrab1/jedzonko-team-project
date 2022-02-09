@@ -33,32 +33,34 @@
                 </div>
             </div>
         </div>
-    {% for dayname in daynames %}
+
         <table class="table">
+            {% for dayname in daynames %}
             <thead>
             <tr class="d-flex">
-                <th class="col-2">{{ dayname }}</th>
+                <th class="col-2">{{ dayname.name }}</th>
                 <th class="col-7"></th>
                 <th class="col-1"></th>
                 <th class="col-2"></th>
             </tr>
             </thead>
-            {% for meal in recipeplan %}
-                {% if meal.dayname == dayname %}
             <tbody class="text-color-lighter">
+            {% for recipe in recipeplan %}
+                {% if recipe.dayname == dayname %}
             <tr class="d-flex">
-                <td class="col-2">{{ meal.meal_name }}</td>
-                <td class="col-7">{{ meal.recipe.description}}</td>
+                <td class="col-2">{{ recipe.meal_name }}</td>
+                <td class="col-7">{{ recipe.recipe }}</td>
                 <td class="col-1 center">
                     <a href="#" class="btn btn-danger rounded-0 text-light m-1">Usuń</a>
                 </td>
                 <td class="col-2 center">
-                    <a href="app-details-schedules.html"
+                    <a href="/recipe/{{ recipe.recipe_id }}"
                        class="btn btn-info rounded-0 text-light m-1">Szczegóły</a>
                 </td>
-                {% endif %}
-            {% endfor %}
             </tr>
+                {% endif %}
+                {% endfor %}
+            {% endfor %}
 {#            <tr class="d-flex">#}
 {#                <td class="col-2">śniadanie</td>#}
 {#                <td class="col-7">płatki owsiane z jagodami i komosą ryżową</td>#}
@@ -81,13 +83,13 @@
 {#                       class="btn btn-info rounded-0 text-light m-1">Szczegóły</a>#}
 {#                </td>#}
 {#            </tr>#}
-            </tbody>
-        </table>
-    {% endfor %}
+{#            </tbody>#}
+{#        </table>#}
+{##}
 {#        <table class="table">#}
 {#            <thead>#}
 {#            <tr class="d-flex">#}
-{#                <th class="col-2">{{ dayname.name }}</th>#}
+{#                <th class="col-2">Poniedziałek</th>#}
 {#                <th class="col-7"></th>#}
 {#                <th class="col-1"></th>#}
 {#                <th class="col-2"></th>#}
@@ -127,8 +129,8 @@
 {#                       class="btn btn-info rounded-0 text-light m-1">Szczegóły</a>#}
 {#                </td>#}
 {#            </tr>#}
-{#            </tbody>#}
-{#        </table>#}
+            </tbody>
+        </table>
 
     </div>
 </div>
