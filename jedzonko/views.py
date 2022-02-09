@@ -79,8 +79,14 @@ class RecipeAdd(View):
 
 
 class RecipeModify(View):
-    def get(self, request):
-        return render(request, "app-edit-recipe.html")
+    def get(self, request, id):
+        name = Recipe.objects.get(id=id)
+        ingredients = Recipe.objects.get(id=id)
+        description = Recipe.objects.get(id=id)
+        preparation = Recipe.objects.get(id=id)
+        method_of_preparation = Recipe.objects.get(id=id)
+        return render(request, "app-edit-recipe.html",
+                      {'name':name, 'ingredience':ingredients, 'description':description, 'preparation':preparation, 'method':method_of_preparation})
 
 
 class PlanID(View):
