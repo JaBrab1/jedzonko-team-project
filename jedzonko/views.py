@@ -4,10 +4,10 @@ from django.views import View
 from django.http import HttpResponse
 from django.contrib import messages
 import random
-from jedzonko.models import Recipe, Plan, RecipePlan, Dayname
+from jedzonko.models import Recipe, Plan, RecipePlan, Dayname, Page
 from django.db.models import Count
 from django.core.paginator import Paginator
-
+from urllib.error import HTTPError
 
 
 class IndexView(View):
@@ -80,13 +80,28 @@ class RecipeAdd(View):
 
 class RecipeModify(View):
     def get(self, request, id):
-        name = Recipe.objects.get(id=id)
-        ingredients = Recipe.objects.get(id=id)
-        description = Recipe.objects.get(id=id)
-        preparation = Recipe.objects.get(id=id)
-        method_of_preparation = Recipe.objects.get(id=id)
-        return render(request, "app-edit-recipe.html",
-                      {'name':name, 'ingredience':ingredients, 'description':description, 'preparation':preparation, 'method':method_of_preparation})
+        try:
+            Recipe.objects.get(id=id)
+        except HTTPError:
+            HTTPError.msg = 'Nie ma takiego przepisu'
+            return HttpResponse(HTTPError.msg)
+        recipe = Recipe.objects.get(id=id)
+        return render(request, "app-edit-recipe.html", {'recipe': recipe})
+
+    def post(self, request, id):
+        recipe = Recipe.objects.get(id=id)
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        preparation = request.POST.get('preparation')
+        method_of_preparation = request.POST.get('method_of_preparation')
+        ingredients = request.POST.get('ingredients')
+        recipe.name = name
+        recipe.description = description
+        recipe.preparation = preparation
+        recipe.method_of_preparation = method_of_preparation
+        recipe.ingredients = ingredients
+        recipe.save()
+        return redirect(f'/recipe/modify/{recipe.id}')
 
 
 class PlanID(View):
@@ -104,8 +119,8 @@ class PlanAdd(View):
         name = request.POST.get("name")
         description = request.POST.get("description")
         if name != "" and description != "":
-            Plan.objects.create(name=name, description=description)
-            return redirect(f'/plan/{plan.id}/details/')
+            plan = Plan.objects.create(name=name, description=description)
+            return redirect(f'/plan/{plan.id}')
         else:
             return render(request, 'app-add-schedules.html', {'alert_flag': True})
 
@@ -146,5 +161,15 @@ class PlanList(View):
         page = request.GET.get('page')
         plans = paginator.get_page(page)
         return render(request, "app-schedules.html", {'plans': plans})
+
+
+class ContactView(View):
+    def get(self, request):
+        if Page.objects.filter(slug="contact").exists():
+            slug = Page.objects.get(slug="contact")
+            ctx = {"actual_date": datetime.now(), "slug": slug}
+            return render(request, "contact.html", ctx)
+        else:
+            return redirect('/')
 
 
