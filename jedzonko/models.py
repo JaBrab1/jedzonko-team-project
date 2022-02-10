@@ -25,6 +25,7 @@ class Plan(models.Model):
     def __str__(self):
         return self.name
 
+
 class Dayname(models.Model):
     name = models.CharField(max_length=16)
     order = models.IntegerField(unique=True)
@@ -57,7 +58,6 @@ class Page(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     slug = models.SlugField(max_length=255)
-
 
     def __str__(self):
         return self.title + " " + self.description + " " + self.slug
