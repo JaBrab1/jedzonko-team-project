@@ -107,12 +107,42 @@ class RecipeModify(View):
             return render(request, "app-edit-recipe.html", {'recipe': recipe, 'alert_flag': True})
 
 
+class PlanModify(View):
+    def get(self, request, id):
+        try:
+            Plan.objects.get(id=id)
+        except HTTPError:
+            HTTPError.msg = 'Nie ma takiego przepisu'
+            return HttpResponse(HTTPError.msg)
+        plan = Plan.objects.get(id=id)
+        return render(request, "app-edit-plan.html", {'plan': plan})
+
+    def post(self, request, id):
+        plan = Plan.objects.get(id=id)
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        if name != "" and description != "":
+            plan.name = name
+            plan.description = description
+            plan.save()
+            return redirect(f'/plan/list/')
+        else:
+            return render(request, "app-edit-plan.html", {'plan': plan, 'alert_flag': True})
+
+
 class PlanID(View):
     def get(self, request, id):
         plan = Plan.objects.get(id=id)
         recipeplan = RecipePlan.objects.filter(plan_id=plan.id).order_by('order')
         daynames = Dayname.objects.filter(id__in=recipeplan.values('dayname_id')).order_by('order')
         return render(request, "app-details-schedules.html", {'plan': plan, 'recipeplan': recipeplan, 'daynames': daynames})
+
+    def post(self, request, id):
+        recipeplanid = request.POST.get("id")
+        recipeplan = RecipePlan.objects.get(id=recipeplanid)
+        recipeplan.delete()
+        return redirect(f'/plan/{id}')
+
 
 class PlanAdd(View):
     def get(self, request):
@@ -136,25 +166,31 @@ class PlanAddRecipe(View):
         return render(request, "app-schedules-meal-recipe.html", {"plan": plan, "dayname": dayname, "recipe": recipe})
 
     def post(self, request):
+        plan1 = Plan.objects.all()
+        dayname1 = Dayname.objects.all()
+        recipe1 = Recipe.objects.all()
         plan = request.POST.get("nameplan")
         plandb = Plan.objects.get(name=plan)
         plan_id = plandb.id
         namemeals = request.POST.get("namemeal")
         numbermeals = request.POST.get("numbermeal")
-        recipe = request.POST.get("recipe")
-        recipedb = Recipe.objects.get(name=recipe)
-        recipe_id = recipedb.id
-        day = request.POST.get("nameday")
-        daydb = Dayname.objects.get(name=day)
-        day_id = daydb.id
-        RecipePlan.objects.create(
-            plan_id=plan_id,
-            meal_name=namemeals,
-            order=numbermeals,
-            recipe_id=recipe_id,
-            dayname_id=day_id
-        )
-        return redirect(f'/plan/{plan_id}/')
+        if numbermeals != "" and namemeals != "":
+            recipe = request.POST.get("recipe")
+            recipedb = Recipe.objects.get(name=recipe)
+            recipe_id = recipedb.id
+            day = request.POST.get("nameday")
+            daydb = Dayname.objects.get(name=day)
+            day_id = daydb.id
+            RecipePlan.objects.create(
+                plan_id=plan_id,
+                meal_name=namemeals,
+                order=numbermeals,
+                recipe_id=recipe_id,
+                dayname_id=day_id
+            )
+            return redirect(f'/plan/{plan_id}/')
+        else:
+            return render(request, 'app-schedules-meal-recipe.html', {"plan": plan1, "dayname": dayname1, "recipe": recipe1, 'alert_flag': True})
 
 
 class PlanList(View):
@@ -176,3 +212,11 @@ class ContactView(View):
             return redirect('/')
 
 
+class AboutView(View):
+    def get(self, request):
+        if Page.objects.filter(slug="about").exists():
+            slug = Page.objects.get(slug="about")
+            ctx = {"actual_date": datetime.now(), "slug": slug}
+            return render(request, "about.html", ctx)
+        else:
+            return redirect('/')

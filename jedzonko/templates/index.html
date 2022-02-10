@@ -1,7 +1,8 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
+<form method="post">
+                    {% csrf_token %}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -30,7 +31,7 @@
                 </li>
                 -->
                 <li class="nav-item ml-4">
-                    <a class="nav-link" href="#about">o aplikacji</a>
+                    <a class="nav-link" href="/about/">o aplikacji</a>
                 </li>
                 <li class="nav-item ml-4">
                     <a class="nav-link disabled" href="/recipe/list/">Przepisy</a>
@@ -192,18 +193,18 @@ Dlatego też postanowiła udostępnić im stronę ze swoimi autorskimi przepisam
                             aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <div class="input-group-append">
                             <button class="input-group-text btn-color border-0 rounded-0" type="submit" id="basic-addon2"><a
-                                    href="index.html">Szukaj</a></button>
+                                    href="">Szukaj</a></button>
                         </div>
                     </div>
                     <div class="container d-flex-row">
-                        <a href="#">
+                        <a href="https://pl-pl.facebook.com/">
                             <i class="fab fa-facebook-square mr-4 icon-social"></i>
                         </a> 
-                        <a href="#">
+                        <a href="https://twitter.com/?lang=pl">
                             <i class="fab fa-twitter-square mr-4 icon-social"></i>
                             
                         </a>
-                        <a href="#">
+                        <a href="https://www.instagram.com/">
                             <i class="fab fa-instagram icon-social"></i>
                         </a>
                     </div>
@@ -224,4 +225,5 @@ Dlatego też postanowiła udostępnić im stronę ze swoimi autorskimi przepisam
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
 </body>
+</form>
 </html>
