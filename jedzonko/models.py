@@ -33,15 +33,6 @@ class Dayname(models.Model):
     def __str__(self):
         return self.name
 
-    # Do wrzucenia w shella -> zapis dni tygodnia w bazie danych
-    # Dayname.objects.create(name="Poniedziałek", order=1)
-    # Dayname.objects.create(name="Wtorek", order=2)
-    # Dayname.objects.create(name="Środa", order=3)
-    # Dayname.objects.create(name="Czwartek", order=4)
-    # Dayname.objects.create(name="Piątek", order=5)
-    # Dayname.objects.create(name="Sobota", order=6)
-    # Dayname.objects.create(name="Niedziela", order=7)
-
 
 class RecipePlan(models.Model):
     meal_name = models.CharField(max_length=255)
@@ -61,4 +52,3 @@ class Page(models.Model):
 
     def __str__(self):
         return self.title + " " + self.description + " " + self.slug
-
