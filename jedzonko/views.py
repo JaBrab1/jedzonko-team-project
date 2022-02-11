@@ -8,14 +8,49 @@ from jedzonko.models import Recipe, Plan, RecipePlan, Dayname, Page
 from django.db.models import Count
 from django.core.paginator import Paginator
 from urllib.error import HTTPError
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from .forms import LogForms, AddUser
 
 
 class IndexView(View):
     def get(self, request):
         recpies = list(Recipe.objects.all())
+        plan = list(Plan.objects.all())
         random.shuffle(recpies)
-        ctx = {"actual_date": datetime.now(), "recipe": recpies}
+        random.shuffle(plan)
+        ctx = {"actual_date": datetime.now(), "recipe": recpies, "plan": plan}
         return render(request, "index.html", ctx)
+
+    def post(self, request):
+        recpies = list(Recipe.objects.all())
+        plan = list(Plan.objects.all())
+        random.shuffle(recpies)
+        random.shuffle(plan)
+        try:
+            if request.POST.get("name") != "":
+                recipename = request.POST.get("name")
+                recipe = Recipe.objects.get(name=recipename)
+                return redirect(f'/recipe/{recipe.id}')
+            elif request.POST.get("weight") != "" and request.POST.get("height") != "":
+                wei = int(request.POST.get("weight"))
+                hei = float(request.POST.get("height").replace(",", "."))
+                bmi = wei / (hei ** 2)
+                bmi = round(bmi, 2)
+                if bmi < 19:
+                    text = f"Twoje BMI to {bmi}, zbyt niski (niedowaga), jeśli otrzymaliśmy wynik poniżej 19"
+                elif 19 < bmi < 25:
+                    text = f"Twoje BMI to {bmi}, prawidłowy (normalna waga), jeżeli nasz wynik mieści się w przedziale 19 – 24,9"
+                elif 25 < bmi < 30:
+                    text = f"Twoje BMI to {bmi}, zbyt wysoki (nadwaga), kiedy otrzymaliśmy BMI z przedziału 25 – 29,9"
+                ctx = {"actual_date": datetime.now(), "recipe": recpies, "plan": plan, "bmi": text}
+                return render(request, "index.html", ctx)
+            else:
+                ctx = {"actual_date": datetime.now(), "recipe": recpies, "plan": plan}
+                return render(request, "index.html", ctx)
+        except:
+            ctx = {"actual_date": datetime.now(), "recipe": recpies, "plan": plan}
+            return render(request, "index.html", ctx)
 
 
 class Dashboard(View):
@@ -53,6 +88,12 @@ class RecipeList(View):
         page = request.GET.get('page')
         recipes = paginator.get_page(page)
         return render(request, "app-recipes.html", {'recipes': recipes})
+
+    def post(self, request):
+        recipid = request.POST.get("id")
+        recip = Recipe.objects.get(id=recipid)
+        recip.delete()
+        return redirect('/recipe/list/')
 
 
 class RecipeAdd(View):
@@ -201,6 +242,12 @@ class PlanList(View):
         plans = paginator.get_page(page)
         return render(request, "app-schedules.html", {'plans': plans})
 
+    def post(self, request):
+        planid = request.POST.get("id")
+        plan = Plan.objects.get(id=planid)
+        plan.delete()
+        return redirect('/plan/list/')
+
 
 class ContactView(View):
     def get(self, request):
@@ -220,3 +267,52 @@ class AboutView(View):
             return render(request, "about.html", ctx)
         else:
             return redirect('/')
+
+
+class UserLogin(View):
+    def get(self, request):
+        form = LogForms()
+        return render(request, 'logowaniehome.html', {'form': form})
+
+    def post(self, request):
+        form = LogForms(request.POST)
+        if form.is_valid():
+            user_login = form.cleaned_data['login']
+            user_password = form.cleaned_data['password']
+            user = authenticate(username=user_login, password=user_password)
+            if user is None:
+                return render(request, 'logowaniehome.html', {'form': form, 'alert_flag': True})
+            else:
+                login(request, user)
+                return redirect('/')
+        else:
+            return render(request, 'logowaniehome.html', {'form': form})
+
+
+class UserLogout(View):
+    def get(self, request):
+        logout(request)
+        return redirect('/')
+
+
+class FullLoginView(View):
+    def get(self, request):
+        form = AddUser()
+        return render(request, 'fulllogin.html', {'form': form})
+
+    def post(self, request):
+        form = AddUser(request.POST)
+        if form.is_valid():
+            loginname = form.cleaned_data['login']
+            password = form.cleaned_data['password']
+            name = form.cleaned_data['name']
+            surname = form.cleaned_data['surname']
+            email = form.cleaned_data['email']
+            u = User.objects.create_user(loginname, password=password, first_name=name, last_name=surname, email=email)
+            login(request, u)
+            return redirect('/login/')
+        else:
+            return render(request, 'fulllogin.html', {'form': form, 'alert_flag': True})
+
+
+

@@ -22,16 +22,9 @@
                 Zaplanuj <span>Jedzonko</span>
             </a>
             <ul class="nav nounderline text-uppercase">
-                <!--
-                <li class="nav-item ml-4">
-                    <a class="nav-link color-header" href="login.html">logowanie</a>
-                </li>
-                <li class="nav-item ml-4">
-                    <a class="nav-link color-header" href="registration.html">rejestracja</a>
-                </li>
-                -->
-                <li class="nav-item ml-4">
-                    <a class="nav-link" href="/about/">o aplikacji</a>
+                {% if user.is_authenticated %}
+                   <li class="nav-item ml-4">
+                    <a class="nav-link" href="/about/">O aplikacji</a>
                 </li>
                 <li class="nav-item ml-4">
                     <a class="nav-link disabled" href="/recipe/list/">Przepisy</a>
@@ -39,10 +32,40 @@
                 <li class="nav-item ml-4">
                     <a class="nav-link disabled" href="/contact/">Kontakt</a>
                 </li>
+                    <li class="nav-item ml-4">
+             <a href="" class="nav-link disabled">Witaj {{ user }}</a>
+                    </li>
+             <li class="circle-div text-center"><i class="fab fa-android icon-user"></i></li>
+                    <li class="nav-item ml-4">
+                    <a class="nav-link disabled" href="/logout/">Wyloguj</a>
+                </li>
+                {% else %}
+                <li class="nav-item ml-4">
+                    <a class="nav-link color-header" href="/login/">Logowanie</a>
+                </li>
+                <li class="nav-item ml-4">
+                    <a class="nav-link color-header" href="/add_user/">Rejestracja</a>
+                </li>
+
+                <li class="nav-item ml-4">
+                    <a class="nav-link" href="/about/">O aplikacji</a>
+                </li>
+                <li class="nav-item ml-4">
+                    <a class="nav-link disabled" href="/recipe/list/">Przepisy</a>
+                </li>
+                <li class="nav-item ml-4">
+                    <a class="nav-link disabled" href="/contact/">Kontakt</a>
+                </li>
+                {% endif %}
+            <li class="nav-item ml-4">
+                <a class="nav-link color-header" href=""> Dzisiaj jest:</a>
+            </li>
+            <li>
+                <a class="nav-link disabled" href="">{{ now }}</a>
+            </li>
             </ul>
         </nav>
     </header>
-
     <section class="padding-large bg-light">
         <div id="carouselExampleControls" class="carousel slide main-slider" data-ride="carousel">
             <div class="carousel-inner container">
@@ -89,13 +112,12 @@
     <section class="section-more padding-small">
         <div class="container d-flex justify-content-between">
             <div class="mr-4">
-                <h1 class="pb-3">Lorem ipsum dolor sit amet</h1>
-                <h4 class="pt-1">consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua.</h4>
+                <h1 class="pb-3"><b>Jeden z wielu planów na naszej stronie...</b>{{ plan.0.name }}</h1>
+                <h4 class="pt-1"></h4>
             </div>
             <div class="ml-4 align-self-center">
-                <button class="btn btn-color rounded-0 mt-4 pl-4 pr-4">
-                    <a href="">Lorem ipsum</a>
+                <button name="plan" value="plan" class="btn btn-color rounded-0 mt-4 pl-4 pr-4">
+                    <a href="/plan/list/">Przejdź do wszystkich planów</a>
                 </button>
             </div>
         </div>
@@ -106,20 +128,20 @@
                 <div class="row">
                     <div class="col text-center">
                         <i class="fas fa-check icon-details"></i>
-                        <h1>Lorem ipsum dolor sit amet</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem.  Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed.
+                        <h1>Zacznij już dziś zdrowo się odżywiać</h1>
+                        <p>Nasze przepisy i plany układane są przez naszą wykwalifikowaną kadrę wysokiej klasy specjalistów.
                         </p>
                     </div>
                     <div class="col text-center pr-4 pl-4 mr-4 ml-4">
                         <i class="far fa-clock icon-details"></i>
-                        <h1>Lorem ipsum dolor sit amet</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem.  Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed.
+                        <h1>Zalety naszych przepisów</h1>
+                        <p>Dania z naszych przepisów można wykonać w bardzo szybki i łatwy spsób.
                         </p>
                     </div>
                     <div class="col text-center">
                             <i class="fas fa-list icon-details"></i>
-                        <h1>Lorem ipsum dolor sit amet</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem.  Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed.
+                        <h1>Wiele przepisów i planów w jednym miejscu</h1>
+                        <p>Na stronie znajdziesz wiele ciekawych przepisów oraz planów żywieniowych, które ułatwią ci funkcjonowanie w codziennym życiu.
                         </p>
                     </div>
                 </div>
@@ -131,20 +153,23 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <h1>Lorem ipsum dolor sie amet</h1>
+                    <h1>Oblicz swoje BMI</h1>
+                    <h2>Podaj wagę w kilogramach i wzrost w metrach</h2>
                 </div>
                 <div class="col-5">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control border-0 rounded-0" placeholder=""
-                            aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <b>Waga</b> <input type="text" name="weight" class="form-control border-0 rounded-0" placeholder=""
+                                           aria-label="Recipient's username" aria-describedby="basic-addon2">&emsp; <b>Wzrost</b> <input type="text" name="height" class="form-control border-0 rounded-0" placeholder=""
+                            aria-label="Recipient's username" aria-describedby="basic-addon2">&emsp;
                         <div class="input-group-append">
-                            <button class="input-group-text btn-color border-0 rounded-0" type="submit" id="basic-addon2">
-                                <a href="index.html">Lorem</a>
-                            </button>
+                            <button class="input-group-text btn-color border-0 rounded-0" type="submit" id="basic-addon2">Oblicz</button>
                         </div>
                     </div>
                 </div>
             </div>
+            {% if bmi %}
+            <li>{{ bmi }}</li>
+            {% endif %}
         </div>
     </section>
 
@@ -152,7 +177,7 @@
         <div class="container d-flex justify-content-center align-items-center">
             <div class="row">
                 <div class="col-4 mr-4">
-                    <div class="div-img">
+                    <img src="/static/images/jedzonko.jpeg/" width="400" height="340" alt="jedzonko">
                     </div>
                 </div>
 
@@ -180,20 +205,20 @@ Dlatego też postanowiła udostępnić im stronę ze swoimi autorskimi przepisam
                 <div class="col pl-4 ml-4">
                      <h3 class="mb-4">Opis menu:</h3>
                     <ul class="container">
-                        <li>O aplikacji</li>
-                        <li>Przepisy</li>
-                        <li>Plany</li>
-                        <li>Pulpit</li>
+                        <li><a href="/about/">O aplikacji</a></li>
+                        <li><a href="/contact/">Kontakt</a></li>
+                        <li><a href="/recipe/list/">Przepisy</a></li>
+                        <li><a href="/plan/list/">Plany</a></li>
+                        <li><a href="/main/">Pulpit</a></li>
                     </ul>
                 </div>
                 <div class="col">
-                    <h3 class="mb-4">Wyszukiwarka:</h3>
+                    <h3 class="mb-4">Wyszukaj przepis:</h3>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control border-0 rounded-0" placeholder=""
+                        <input type="text" name="name" class="form-control border-0 rounded-0" placeholder=""
                             aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button class="input-group-text btn-color border-0 rounded-0" type="submit" id="basic-addon2"><a
-                                    href="">Szukaj</a></button>
+                            <button class="input-group-text btn-color border-0 rounded-0" type="submit" id="basic-addon2">Szukaj</button>
                         </div>
                     </div>
                     <div class="container d-flex-row">
