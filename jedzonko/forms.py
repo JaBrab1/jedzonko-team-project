@@ -28,3 +28,16 @@ class AddUser(forms.Form):
         password_repeat = cleaned_data['password_repeat']
         if password != password_repeat:
             raise ValidationError("Hasło nie jest takie samo")
+
+
+class ResetPass(forms.Form):
+    old_password = forms.CharField(label="Aktualne hasło", widget=forms.PasswordInput)
+    password = forms.CharField(label="Nowe hasło", widget=forms.PasswordInput)
+    password_repeat = forms.CharField(label="Powtórz hasło", widget=forms.PasswordInput)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data['password']
+        password_repeat = cleaned_data['password_repeat']
+        if password != password_repeat:
+            raise ValidationError("Hasło nie jest takie samo")
