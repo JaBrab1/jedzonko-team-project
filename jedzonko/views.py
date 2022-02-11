@@ -10,7 +10,8 @@ from django.core.paginator import Paginator
 from urllib.error import HTTPError
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from .forms import LogForms, AddUser
+from .forms import LogForms, AddUser, ResetPass
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 class IndexView(View):
@@ -60,7 +61,9 @@ class Dashboard(View):
         plan = plans[0]
         recipeplan = RecipePlan.objects.filter(plan_id=plan.id).order_by('order')
         daynames = Dayname.objects.filter(id__in=recipeplan.values('dayname_id')).order_by('order')
-        return render(request, "dashboard.html", {'recipes': recipes, 'plans': plans, 'plan': plan, 'recipeplan': recipeplan, 'daynames': daynames})
+        return render(request, "dashboard.html",
+                      {'recipes': recipes, 'plans': plans, 'plan': plan, 'recipeplan': recipeplan,
+                       'daynames': daynames})
 
 
 class RecipeID(View):
@@ -84,7 +87,7 @@ class RecipeID(View):
 class RecipeList(View):
     def get(self, request):
         recipe_list = Recipe.objects.all().order_by('-votes', '-created')
-        paginator = Paginator(recipe_list, 50)
+        paginator = Paginator(recipe_list, 5)
         page = request.GET.get('page')
         recipes = paginator.get_page(page)
         return render(request, "app-recipes.html", {'recipes': recipes})
@@ -96,7 +99,9 @@ class RecipeList(View):
         return redirect('/recipe/list/')
 
 
-class RecipeAdd(View):
+class RecipeAdd(PermissionRequiredMixin, View):
+    permission_required = 'jedzonko.add_recipe'
+
     def get(self, request):
         return render(request, "app-add-recipe.html")
 
@@ -119,7 +124,9 @@ class RecipeAdd(View):
             return render(request, 'app-add-recipe.html', {'alert_flag': True})
 
 
-class RecipeModify(View):
+class RecipeModify(PermissionRequiredMixin, View):
+    permission_required = 'jedzonko.change_recipe'
+
     def get(self, request, id):
         try:
             Recipe.objects.get(id=id)
@@ -148,7 +155,9 @@ class RecipeModify(View):
             return render(request, "app-edit-recipe.html", {'recipe': recipe, 'alert_flag': True})
 
 
-class PlanModify(View):
+class PlanModify(PermissionRequiredMixin, View):
+    permission_required = 'jedzonko.add_plan'
+
     def get(self, request, id):
         try:
             Plan.objects.get(id=id)
@@ -176,7 +185,8 @@ class PlanID(View):
         plan = Plan.objects.get(id=id)
         recipeplan = RecipePlan.objects.filter(plan_id=plan.id).order_by('order')
         daynames = Dayname.objects.filter(id__in=recipeplan.values('dayname_id')).order_by('order')
-        return render(request, "app-details-schedules.html", {'plan': plan, 'recipeplan': recipeplan, 'daynames': daynames})
+        return render(request, "app-details-schedules.html",
+                      {'plan': plan, 'recipeplan': recipeplan, 'daynames': daynames})
 
     def post(self, request, id):
         recipeplanid = request.POST.get("id")
@@ -185,7 +195,9 @@ class PlanID(View):
         return redirect(f'/plan/{id}')
 
 
-class PlanAdd(View):
+class PlanAdd(PermissionRequiredMixin, View):
+    permission_required = 'jedzonko.add_plan'
+
     def get(self, request):
         return render(request, "app-add-schedules.html")
 
@@ -199,7 +211,9 @@ class PlanAdd(View):
             return render(request, 'app-add-schedules.html', {'alert_flag': True})
 
 
-class PlanAddRecipe(View):
+class PlanAddRecipe(PermissionRequiredMixin, View):
+    permission_required = 'jedzonko.add_recipe'
+
     def get(self, request):
         plan = Plan.objects.all()
         dayname = Dayname.objects.all()
@@ -231,13 +245,14 @@ class PlanAddRecipe(View):
             )
             return redirect(f'/plan/{plan_id}/')
         else:
-            return render(request, 'app-schedules-meal-recipe.html', {"plan": plan1, "dayname": dayname1, "recipe": recipe1, 'alert_flag': True})
+            return render(request, 'app-schedules-meal-recipe.html',
+                          {"plan": plan1, "dayname": dayname1, "recipe": recipe1, 'alert_flag': True})
 
 
 class PlanList(View):
     def get(self, request):
         plan_list = Plan.objects.all().order_by('name')
-        paginator = Paginator(plan_list, 50)
+        paginator = Paginator(plan_list, 5)
         page = request.GET.get('page')
         plans = paginator.get_page(page)
         return render(request, "app-schedules.html", {'plans': plans})
@@ -295,7 +310,9 @@ class UserLogout(View):
         return redirect('/')
 
 
-class FullLoginView(View):
+class FullLoginView(PermissionRequiredMixin, View):
+    permission_required = 'jedzonko.view_user'
+
     def get(self, request):
         form = AddUser()
         return render(request, 'fulllogin.html', {'form': form})
@@ -310,9 +327,86 @@ class FullLoginView(View):
             email = form.cleaned_data['email']
             u = User.objects.create_user(loginname, password=password, first_name=name, last_name=surname, email=email)
             login(request, u)
-            return redirect('/login/')
+            return redirect('/')
         else:
             return render(request, 'fulllogin.html', {'form': form, 'alert_flag': True})
 
 
+class AccountModify(PermissionRequiredMixin, View):
+    permission_required = 'jedzonko.change_user'
+
+    def get(self, request, id):
+        u = User.objects.get(id=id)
+        return render(request, 'modify.html', {'user': u})
+
+
+class ChangeDateAccount(PermissionRequiredMixin, View):
+    permission_required = 'jedzonko.change_user'
+
+    def get(self, request, id):
+        u = User.objects.get(id=id)
+        return render(request, 'changedateuser.html', {'user': u})
+
+    def post(self, request, id):
+        u = User.objects.get(id=id)
+        username = request.POST.get("username")
+        name = request.POST.get("name")
+        surname = request.POST.get("surname")
+        email = request.POST.get("email")
+        superuser = request.POST.get("super")
+        if username != "" and name != "" and surname != "" and email != "" and superuser != "":
+            u.username = username
+            u.name = name
+            u.surname = surname
+            u.email = email
+            u.is_superuser = superuser
+            u.save()
+            return redirect(f'/modify/{u.id}')
+        else:
+            return render(request, "changedateuser.html", {'user': u, 'alert_flag': True})
+
+
+class ResetPasswordView(PermissionRequiredMixin, View):
+    permission_required = 'jedzonko.change_user'
+
+    def get(self, request, id):
+        form = ResetPass()
+        return render(request, 'reset_pass.html', {'form': form})
+
+    def post(self, request, id):
+        form = ResetPass(request.POST)
+        if form.is_valid():
+            password = form.cleaned_data['password']
+            u = User.objects.get(id=id)
+            u.set_password(password)
+            u.save()
+            return redirect(f'/login/')
+        else:
+            return render(request, 'reset_pass.html', {'form': form})
+
+
+class DeleteUser(PermissionRequiredMixin, View):
+    permission_required = 'jedzonko.delete_user'
+
+    def get(self, request, id):
+        u = User.objects.get(id=id)
+        return render(request, "deleteuser.html", {"user": u})
+
+    def post(self, request, id):
+        if request.POST.get("id") == "1":
+            logout(request)
+            u = User.objects.get(id=id)
+            u.delete()
+            return redirect("/")
+        elif request.POST.get("prev") == "2":
+            u = User.objects.get(id=id)
+            return redirect(f'/modify/{u.id}/')
+
+
+class UserAllView(PermissionRequiredMixin, View):
+    permission_required = 'jedzonko.view_user'
+
+    def get(self, request):
+        alluser = User.objects.all()
+        return render(request, "userall.html", {"user": alluser})
 

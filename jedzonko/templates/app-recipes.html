@@ -87,8 +87,8 @@
         </span>
 {% endfor %}
         {% if recipes.has_next %}
-            <a href="?page={{ recipes.next_page_number }}">Następna</a>
-            &emsp;&emsp;&emsp;<a href="?page={{ recipes.paginator.num_pages }}">Ostatnia strona &raquo;</a>
+            <a href="?page={{ recipes.next_page_number }}">Następna</a>&emsp;&emsp;<a href="?page={{ recipes.paginator.num_pages }}">Ostatnia strona &raquo;</a>
+            &emsp;&emsp;
         {% endif %}
     </span>
 </div>
