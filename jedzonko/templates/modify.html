@@ -23,9 +23,15 @@
                 Zaplanuj <span>Jedzonko</span>
             </a>
              <div class="d-flex justify-content-around">
+                 {% if user.is_authenticated %}
                  <a href="" class="nav-link disabled">Witaj {{ user }}</a>
              <div class="circle-div text-center"><i class="fab fa-android icon-user"></i></div>&emsp;
                  <h4><a class="nav-link disabled" href="/logout/">Wyloguj</a></h4>
+                     {% else %}
+                     <a href="" class="nav-link disabled">Witaj {{ user }}</a>
+             <div class="circle-div text-center"><i class="fab fa-android icon-user"></i></div>&emsp;
+                 <h4><a class="nav-link disabled" href="/login/">Zaloguj</a></h4>
+                 {% endif %}
              </div>
         </nav>
     </header>
@@ -37,25 +43,23 @@
 <!-- //--------------------------- page content -------------------------// -->
 
             <h2><b>Użytkownik </b>{{ user3 }}</h2><br>
+                 {% if user.is_authenticated %}
                 <lu>
                     <li><b>Nazwa użytkownika:</b> {{ user3.username }}<br></li>
                     <li><b>Imię: </b>{{ user3.first_name }}<br></li>
                     <li><b>Nazwisko: </b>{{ user3.last_name }}<br></li>
                     <li><b>Adres email:</b> {{ user3.email }}<br></li>
-                    <li><b>Ostatnia aktywność: </b> {{ user3.last.login }}<br></li>
+                    <li><b>Ostatnia aktywność: </b> {{ user3.last_login }}<br></li>
                     <li><b>Administrator: </b> {{ user3.is_superuser }}<br></li>
                     <li><b>Data założenia konta: </b> {{ user3.date_joined }}</li>
                 </lu>
-                {% if perms.jedzonko %}
-                  <a href="/changedateuser/{{ user3.id }}/" class="btn btn-danger rounded-0 text-light m-1">Edytuj dane</a>
+                     {% if perms.jedzonko.view_user %}
+                          <a href="/changedateuser/{{ user3.id }}/" class="btn btn-danger rounded-0 text-light m-1">Edytuj dane</a>
                 <a href="/reset_password/{{ user3.id }}/" class="btn btn-warning rounded-0 text-light m-1">Zmień hasło</a>
                 <a href="/deleteuser/{{ user3.id}}/" class="btn btn-info rounded-0 text-light m-1">Usuń konto</a>
                 <a href="/userall/" class="btn btn-info rounded-0 text-light m-1">Wszyscy użytkownicy</a>
-                {% else %}
- <a href="/changedateuser/{{ user3.id }}/" class="btn btn-danger rounded-0 text-light m-1">Edytuj dane</a>
-                <a href="/reset_password/{{ user3.id }}/" class="btn btn-warning rounded-0 text-light m-1">Zmień hasło</a>
-                <a href="/deleteuser/{{ user3.id}}/" class="btn btn-info rounded-0 text-light m-1">Usuń konto</a>
-                {% endif %}
+                         {% endif %}
+            {% endif %}
 <!-- //--------------------------- page content end ---------------------// -->
 
             </div>

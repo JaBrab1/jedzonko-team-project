@@ -310,9 +310,7 @@ class UserLogout(View):
         return redirect('/')
 
 
-class FullLoginView(PermissionRequiredMixin, View):
-    permission_required = 'jedzonko.view_user'
-
+class FullLoginView(View):
     def get(self, request):
         form = AddUser()
         return render(request, 'fulllogin.html', {'form': form})
@@ -332,8 +330,7 @@ class FullLoginView(PermissionRequiredMixin, View):
             return render(request, 'fulllogin.html', {'form': form, 'alert_flag': True})
 
 
-class AccountModify(PermissionRequiredMixin, View):
-    permission_required = 'jedzonko.change_user'
+class AccountModify(View):
 
     def get(self, request, id):
         u = User.objects.get(id=id)
@@ -356,8 +353,8 @@ class ChangeDateAccount(PermissionRequiredMixin, View):
         superuser = request.POST.get("super")
         if username != "" and name != "" and surname != "" and email != "" and superuser != "":
             u.username = username
-            u.name = name
-            u.surname = surname
+            u.first_name = name
+            u.last_name = surname
             u.email = email
             u.is_superuser = superuser
             u.save()
@@ -409,4 +406,3 @@ class UserAllView(PermissionRequiredMixin, View):
     def get(self, request):
         alluser = User.objects.all()
         return render(request, "userall.html", {"user1": alluser})
-
