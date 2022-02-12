@@ -23,7 +23,7 @@
                 Zaplanuj <span>Jedzonko</span>
             </a>
              <div class="d-flex justify-content-around">
-                 <a href="" class="nav-link disabled">Wszyscy użytkownicy</a>
+                 <a href="" class="nav-link disabled">Witaj {{ user }}</a>
              <div class="circle-div text-center"><i class="fab fa-android icon-user"></i></div>&emsp;
                  <h4><a class="nav-link disabled" href="/logout/">Wyloguj</a></h4>
              </div>
@@ -35,14 +35,14 @@
 
             <div class="m-4 p-3 width-medium text-color-darker">
 <!-- //--------------------------- page content -------------------------// -->
-                    {% for users in user %}
+                    {% for users in user1 %}
             <h2><b>Użytkownik </b>{{ users.username}}</h2><br>
                 <lu>
                     <li><b>Nazwa użytkownika:</b> {{ users.username }}<br></li>
                     <li><b>Imię: </b>{{ users.first_name }}<br></li>
                     <li><b>Nazwisko: </b>{{ users.last_name }}<br></li>
                     <li><b>Adres email:</b> {{ users.email }}<br></li>
-                    <li><b>Ostatnia aktywność: </b> {{ users.last.login }}<br></li>
+                    <li><b>Ostatnia aktywność: </b> {{ users.last_login }}<br></li>
                     <li><b>Administrator: </b> {{ users.is_superuser }}<br></li>
                     <li><b>Data założenia konta: </b> {{ users.date_joined }}</li>
                 </lu>

@@ -36,25 +36,25 @@
             <div class="m-4 p-3 width-medium text-color-darker">
 <!-- //--------------------------- page content -------------------------// -->
 
-            <h2><b>Użytkownik </b>{{ user}}</h2><br>
+            <h2><b>Użytkownik </b>{{ user3 }}</h2><br>
                 <lu>
-                    <li><b>Nazwa użytkownika:</b> {{ user.username }}<br></li>
-                    <li><b>Imię: </b>{{ user.first_name }}<br></li>
-                    <li><b>Nazwisko: </b>{{ user.last_name }}<br></li>
-                    <li><b>Adres email:</b> {{ user.email }}<br></li>
-                    <li><b>Ostatnia aktywność: </b> {{ user.last.login }}<br></li>
-                    <li><b>Administrator: </b> {{ user.is_superuser }}<br></li>
-                    <li><b>Data założenia konta: </b> {{ user.date_joined }}</li>
+                    <li><b>Nazwa użytkownika:</b> {{ user3.username }}<br></li>
+                    <li><b>Imię: </b>{{ user3.first_name }}<br></li>
+                    <li><b>Nazwisko: </b>{{ user3.last_name }}<br></li>
+                    <li><b>Adres email:</b> {{ user3.email }}<br></li>
+                    <li><b>Ostatnia aktywność: </b> {{ user3.last.login }}<br></li>
+                    <li><b>Administrator: </b> {{ user3.is_superuser }}<br></li>
+                    <li><b>Data założenia konta: </b> {{ user3.date_joined }}</li>
                 </lu>
                 {% if perms.jedzonko %}
-                  <a href="/changedateuser/{{ user.id }}/" class="btn btn-danger rounded-0 text-light m-1">Edytuj dane</a>
-                <a href="/reset_password/{{ user.id }}/" class="btn btn-warning rounded-0 text-light m-1">Zmień hasło</a>
-                <a href="/deleteuser/{{ user.id}}/" class="btn btn-info rounded-0 text-light m-1">Usuń konto</a>
+                  <a href="/changedateuser/{{ user3.id }}/" class="btn btn-danger rounded-0 text-light m-1">Edytuj dane</a>
+                <a href="/reset_password/{{ user3.id }}/" class="btn btn-warning rounded-0 text-light m-1">Zmień hasło</a>
+                <a href="/deleteuser/{{ user3.id}}/" class="btn btn-info rounded-0 text-light m-1">Usuń konto</a>
                 <a href="/userall/" class="btn btn-info rounded-0 text-light m-1">Wszyscy użytkownicy</a>
                 {% else %}
- <a href="/changedateuser/{{ user.id }}/" class="btn btn-danger rounded-0 text-light m-1">Edytuj dane</a>
-                <a href="/reset_password/{{ user.id }}/" class="btn btn-warning rounded-0 text-light m-1">Zmień hasło</a>
-                <a href="/deleteuser/{{ user.id}}/" class="btn btn-info rounded-0 text-light m-1">Usuń konto</a>
+ <a href="/changedateuser/{{ user3.id }}/" class="btn btn-danger rounded-0 text-light m-1">Edytuj dane</a>
+                <a href="/reset_password/{{ user3.id }}/" class="btn btn-warning rounded-0 text-light m-1">Zmień hasło</a>
+                <a href="/deleteuser/{{ user3.id}}/" class="btn btn-info rounded-0 text-light m-1">Usuń konto</a>
                 {% endif %}
 <!-- //--------------------------- page content end ---------------------// -->
 

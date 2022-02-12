@@ -337,7 +337,7 @@ class AccountModify(PermissionRequiredMixin, View):
 
     def get(self, request, id):
         u = User.objects.get(id=id)
-        return render(request, 'modify.html', {'user': u})
+        return render(request, 'modify.html', {'user3': u})
 
 
 class ChangeDateAccount(PermissionRequiredMixin, View):
@@ -345,7 +345,7 @@ class ChangeDateAccount(PermissionRequiredMixin, View):
 
     def get(self, request, id):
         u = User.objects.get(id=id)
-        return render(request, 'changedateuser.html', {'user': u})
+        return render(request, 'changedateuser.html', {'user2': u})
 
     def post(self, request, id):
         u = User.objects.get(id=id)
@@ -361,9 +361,9 @@ class ChangeDateAccount(PermissionRequiredMixin, View):
             u.email = email
             u.is_superuser = superuser
             u.save()
-            return redirect(f'/modify/{u.id}')
+            return redirect(f'/userall/')
         else:
-            return render(request, "changedateuser.html", {'user': u, 'alert_flag': True})
+            return render(request, "changedateuser.html", {'user2': u, 'alert_flag': True})
 
 
 class ResetPasswordView(PermissionRequiredMixin, View):
@@ -408,5 +408,5 @@ class UserAllView(PermissionRequiredMixin, View):
 
     def get(self, request):
         alluser = User.objects.all()
-        return render(request, "userall.html", {"user": alluser})
+        return render(request, "userall.html", {"user1": alluser})
 
