@@ -124,8 +124,7 @@ class RecipeAdd(PermissionRequiredMixin, View):
             return render(request, 'app-add-recipe.html', {'alert_flag': True})
 
 
-class RecipeModify(PermissionRequiredMixin, View):
-    permission_required = 'jedzonko.change_recipe'
+class RecipeModify(View):
 
     def get(self, request, id):
         try:
@@ -143,20 +142,29 @@ class RecipeModify(PermissionRequiredMixin, View):
         preparation = request.POST.get('preparation')
         method_of_preparation = request.POST.get('method_of_preparation')
         ingredients = request.POST.get('ingredients')
-        if name != "" and description != "" and preparation != "" and method_of_preparation != "" and ingredients != "":
+        user = request.user
+        if name != "" and description != "" and preparation != "" and method_of_preparation != "" and ingredients != "" and user.is_authenticated:
             recipe.name = name
             recipe.description = description
             recipe.preparation = preparation
             recipe.method_of_preparation = method_of_preparation
             recipe.ingredients = ingredients
             recipe.save()
-            return redirect(f'/recipe/list/')
+            return redirect('/recipe/list/')
+        elif name != "" and description != "" and preparation != "" and method_of_preparation != "" and ingredients != "":
+            Recipe.objects.create(
+                name=name,
+                description=description,
+                preparation=preparation,
+                method_of_preparation=method_of_preparation,
+                ingredients=ingredients,
+            )
+            return redirect('/recipe/list/')
         else:
             return render(request, "app-edit-recipe.html", {'recipe': recipe, 'alert_flag': True})
 
 
-class PlanModify(PermissionRequiredMixin, View):
-    permission_required = 'jedzonko.add_plan'
+class PlanModify(View):
 
     def get(self, request, id):
         try:
@@ -171,11 +179,18 @@ class PlanModify(PermissionRequiredMixin, View):
         plan = Plan.objects.get(id=id)
         name = request.POST.get('name')
         description = request.POST.get('description')
-        if name != "" and description != "":
+        user = request.user
+        if name != "" and description != "" and user.is_authenticated:
             plan.name = name
             plan.description = description
             plan.save()
             return redirect(f'/plan/list/')
+        elif name != "" and description != "":
+            Plan.objects.create(
+                name=name,
+                description=description,
+            )
+            return redirect('/plan/list/')
         else:
             return render(request, "app-edit-plan.html", {'plan': plan, 'alert_flag': True})
 
@@ -338,7 +353,7 @@ class AccountModify(View):
 
 
 class ChangeDateAccount(PermissionRequiredMixin, View):
-    permission_required = 'jedzonko.change_user'
+    permission_required = 'jedzonko.view_user'
 
     def get(self, request, id):
         u = User.objects.get(id=id)
