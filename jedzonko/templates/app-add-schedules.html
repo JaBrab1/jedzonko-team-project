@@ -5,8 +5,10 @@
     {% csrf_token %}
     <div class="row border-bottom border-3 p-1 m-1">
         <div class="col noPadding">
-            <h3 class="color-header text-uppercase">Nowy Przepis</h3>
+            <h3 class="color-header text-uppercase">Nowy Plan</h3>
         </div>
+         <a href="/plan/list/" type="submit" class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">
+              Powrót</a>
     </div>
     <div class="schedules-content">
             <div class="form-group row">
@@ -30,7 +32,7 @@
                 </div>
             </div>
              <div class="col d-flex justify-content-end mb-2 noPadding">
-                 <button class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Wyślij</button>
+                 <button class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Zapisz</button>
                   {% if alert_flag %}
     <script>alert("Wypełnij poprawnie wszystkie pola")</script>
     {% endif %}
