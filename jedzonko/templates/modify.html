@@ -53,13 +53,17 @@
                     <li><b>Administrator: </b> {{ user3.is_superuser }}<br></li>
                     <li><b>Data założenia konta: </b> {{ user3.date_joined }}</li>
                 </lu>
-                     {% if perms.jedzonko.view_user %}
+                     {% endif %}
+                     {% if user.is_superuser %}
                           <a href="/changedateuser/{{ user3.id }}/" class="btn btn-danger rounded-0 text-light m-1">Edytuj dane</a>
                 <a href="/reset_password/{{ user3.id }}/" class="btn btn-warning rounded-0 text-light m-1">Zmień hasło</a>
-                <a href="/deleteuser/{{ user3.id}}/" class="btn btn-info rounded-0 text-light m-1">Usuń konto</a>
+                <a href="/deleteuser/{{ user3.id}}/" class="btn btn-info rounded-0 text-light m-1">Usuń konto</a><br>
                 <a href="/userall/" class="btn btn-danger rounded-0 text-light m-1">Wszyscy użytkownicy</a>
+                         {% else %}
+                         <a href="/changedateuser/{{ user3.id }}/" class="btn btn-danger rounded-0 text-light m-1">Edytuj dane</a>
+                <a href="/reset_password/{{ user3.id }}/" class="btn btn-warning rounded-0 text-light m-1">Zmień hasło</a>
+                <a href="/deleteuser/{{ user3.id}}/" class="btn btn-info rounded-0 text-light m-1">Usuń konto</a>
                          {% endif %}
-            {% endif %}
 <!-- //--------------------------- page content end ---------------------// -->
 
             </div>

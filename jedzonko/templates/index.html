@@ -58,11 +58,22 @@
                 </li>
                 {% endif %}
             <li class="nav-item ml-4">
-                <a class="nav-link color-header" href=""> Dzisiaj jest:</a>
+                <p class="nav-link color-header" href=""> Dzisiaj jest:</p>
             </li>
             <li>
-                <a class="nav-link disabled" href="">{{ now }}</a>
+                <p class="nav-link disabled" href="">{{ now }}</p>
             </li>
+            <br><li class="nav-item ml-4">
+                <a href="https://time.is/Warsaw" id="time_is_link" rel="nofollow" class="nav-link color-header" >Godzina:</a>
+            </li>
+            <li class="nav-item ml-4">
+                <span id="Warsaw_z733" class="nav-link disabled"></span>
+                <script src="//widget.time.is/t.js"></script>
+            <script>
+            time_is_widget.init({Warsaw_z733:{}});
+            </script>
+            </li>
+
             </ul>
         </nav>
     </header>

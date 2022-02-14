@@ -46,9 +46,15 @@
                     <li><b>Administrator: </b> {{ user.is_superuser }}<br></li>
                     <li><b>Data założenia konta: </b> {{ user.date_joined }}</li>
                 </lu>
-                <h1>Czy na pewno chcesz usnąć swoje konto na portalu jedzonko.pl???</h1>
+                 {% if perms.jedzonko.view_user %}
+                <h1>Czy na pewno chcesz usnąć konto użytkownika {{ user.username }} na portalu jedzonko.pl???</h1>
                 <button name="id" href="/" value="1" class="btn btn-info rounded-0 text-light m-1">Usuń konto</button>
                 <button name="prev" href="/modify/{{ user.id }}/"  value="2" class="btn btn-warning rounded-0 text-light m-1">Powrót</button>
+                {% else %}
+                 <h1>Czy na pewno chcesz usnąć swoje konto na portalu jedzonko.pl???</h1>
+                <button name="id" href="/" value="1" class="btn btn-info rounded-0 text-light m-1">Usuń konto</button>
+                <button name="prev" href="/modify/{{ user.id }}/"  value="2" class="btn btn-warning rounded-0 text-light m-1">Powrót</button>
+                {% endif %}
 <!-- //--------------------------- page content end ---------------------// -->
 
             </div>

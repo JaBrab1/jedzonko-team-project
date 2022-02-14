@@ -35,10 +35,22 @@
        <h2>Rejestracja</h2>
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="zaloguj">
-                            {% if alert_flag %}
-    <script>alert("Login lub hasło jest nie prawidłowe")</script>
-    {% endif %}
+            {% if perms.jedzonko.view_user %}
+                <h2>Nadawanie uprawnień(True lub False):</h2>
+    <p>
+        <label for="id is_superuser">Administrator:</label>
+        <input id="id is_superuser" type="text" name="is_superuser" maxlength="100" required="">
+    </p>
+                <p>
+        <label for="id is_staff">Kadra:</label>
+        <input id="id is_staff" type="text" name="is_staff" maxlength="100" required="">
+    </p>
+                <p>
+        <label for="id is_active">Aktywność:</label>
+        <input id="id is_active" type="text" name="is_active" maxlength="100" required="">
+    </p>
+            {% endif %}
+    <input type="submit" value="Utwórz konto">
     </form>
 
 <!-- //--------------------------- page content end ---------------------// -->
