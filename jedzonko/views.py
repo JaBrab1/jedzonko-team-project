@@ -332,20 +332,48 @@ class FullLoginView(View):
 
     def post(self, request):
         form = AddUser(request.POST)
+        user = request.user
         if form.is_valid():
-            loginname = form.cleaned_data['login']
-            password = form.cleaned_data['password']
-            name = form.cleaned_data['name']
-            surname = form.cleaned_data['surname']
-            email = form.cleaned_data['email']
-            u = User.objects.create_user(loginname, password=password, first_name=name, last_name=surname, email=email)
-            login(request, u)
-            return redirect('/')
+            if user.is_superuser:
+                loginname = form.cleaned_data['login']
+                password = form.cleaned_data['password']
+                name = form.cleaned_data['name']
+                surname = form.cleaned_data['surname']
+                email = form.cleaned_data['email']
+                superuser = request.POST.get('is_superuser')
+                staff = request.POST.get('is_staff')
+                active = request.POST.get('is_active')
+                User.objects.create_user(
+                    username=loginname,
+                    password=password,
+                    first_name=name,
+                    last_name=surname,
+                    email=email,
+                    is_superuser=superuser,
+                    is_staff=staff,
+                    is_active=active
+                )
+                return redirect('/userall/')
+            else:
+                loginname = form.cleaned_data['login']
+                password = form.cleaned_data['password']
+                name = form.cleaned_data['name']
+                surname = form.cleaned_data['surname']
+                email = form.cleaned_data['email']
+                User.objects.create_user(
+                    username=loginname,
+                    password=password,
+                    first_name=name,
+                    last_name=surname,
+                    email=email,
+                )
+                return redirect('/login/')
         else:
-            return render(request, 'fulllogin.html', {'form': form, 'alert_flag': True})
+            return render(request, 'fulllogin.html', {'form': form})
 
 
-class AccountModify(View):
+class AccountModify(PermissionRequiredMixin, View):
+    permission_required = 'jedzonko.view_user'
 
     def get(self, request, id):
         u = User.objects.get(id=id)
@@ -353,7 +381,7 @@ class AccountModify(View):
 
 
 class ChangeDateAccount(PermissionRequiredMixin, View):
-    permission_required = 'jedzonko.view_user'
+    permission_required = 'jedzonko.change_user'
 
     def get(self, request, id):
         u = User.objects.get(id=id)
@@ -366,12 +394,14 @@ class ChangeDateAccount(PermissionRequiredMixin, View):
         surname = request.POST.get("surname")
         email = request.POST.get("email")
         superuser = request.POST.get("super")
+        user = request.user
         if username != "" and name != "" and surname != "" and email != "" and superuser != "":
             u.username = username
             u.first_name = name
             u.last_name = surname
             u.email = email
             u.is_superuser = superuser
+            user.is_superuser = False
             u.save()
             return redirect(f'/userall/')
         else:
@@ -406,10 +436,9 @@ class DeleteUser(PermissionRequiredMixin, View):
 
     def post(self, request, id):
         if request.POST.get("id") == "1":
-            logout(request)
             u = User.objects.get(id=id)
             u.delete()
-            return redirect("/")
+            return redirect("/userall/")
         elif request.POST.get("prev") == "2":
             u = User.objects.get(id=id)
             return redirect(f'/modify/{u.id}/')

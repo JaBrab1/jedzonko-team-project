@@ -39,6 +39,7 @@
 
                     <form method="post">
              {% csrf_token %}
+                        {% if perms.jedzonko.view_user %}
                     <li><b>Nazwa użytkownika:</b><label>
                         <input class="w-70 p-1" name="username" value={{ user2.username }}>
                     </label><br></li>
@@ -54,6 +55,26 @@
                     <li><b>Administrator:</b><label>
                         <input class="w-70 p-1" name="super" value={{ user2.is_superuser }}>
                     </label><br></li>
+                            <li><b>Kadra:</b><label>
+                        <input class="w-70 p-1" name="super" value={{ user2.is_staff }}>
+                    </label><br></li>
+                                  <li><b>Aktywność:</b><label>
+                        <input class="w-70 p-1" name="super" value={{ user2.is_active }}>
+                    </label><br></li>
+                        {% else %}
+                             <li><b>Nazwa użytkownika:</b><label>
+                        <input class="w-70 p-1" name="username" value={{ user2.username }}>
+                    </label><br></li>
+                    <li><b>Imię: </b><label>
+                        <input class="w-70 p-1" name="name" value={{ user2.first_name }}>
+                    </label><br></li>
+                    <li><b>Nazwisko: </b><label>
+                        <input class="w-70 p-1" name="surname" value={{ user2.last_name }}>
+                    </label><br></li>
+                    <li><b>Adres email:</b><label>
+                        <input class="w-70 p-1" name="email" value={{ user2.email }}>
+                    </label><br></li>
+                        {% endif %}
                      <button type="submit"  class="btn btn-danger rounded-0 text-light m-1">Zapisz</button>
                 <a href="/modify/{{user2.id}}/" class="btn btn-warning rounded-0 text-light m-1">Powrót</a>
                     </form>

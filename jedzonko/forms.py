@@ -31,7 +31,6 @@ class AddUser(forms.Form):
 
 
 class ResetPass(forms.Form):
-    old_password = forms.CharField(label="Aktualne hasło", widget=forms.PasswordInput)
     password = forms.CharField(label="Nowe hasło", widget=forms.PasswordInput)
     password_repeat = forms.CharField(label="Powtórz hasło", widget=forms.PasswordInput)
 

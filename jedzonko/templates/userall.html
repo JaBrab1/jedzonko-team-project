@@ -39,13 +39,24 @@
                     {% for users in user1 %}
             <h2><b>Użytkownik </b>{{ users.username}}</h2><br>
                 <lu>
+                {% if perms.jedzonko.view_user %}
                     <li><b>Nazwa użytkownika:</b> {{ users.username }}<br></li>
                     <li><b>Imię: </b>{{ users.first_name }}<br></li>
                     <li><b>Nazwisko: </b>{{ users.last_name }}<br></li>
                     <li><b>Adres email:</b> {{ users.email }}<br></li>
+                     <li><b>Aktywność: </b>{{ users.is_active }}</li>
                     <li><b>Ostatnia aktywność: </b> {{ users.last_login }}<br></li>
+                    <li><b>Kadra: </b>{{ users.is_staff }}</li>
                     <li><b>Administrator: </b> {{ users.is_superuser }}<br></li>
                     <li><b>Data założenia konta: </b> {{ users.date_joined }}</li>
+                {% else %}
+                <li><b>Nazwa użytkownika:</b> {{ users.username }}<br></li>
+                    <li><b>Imię: </b>{{ users.first_name }}<br></li>
+                    <li><b>Nazwisko: </b>{{ users.last_name }}<br></li>
+                    <li><b>Adres email:</b> {{ users.email }}<br></li>
+                <li><b>Ostatnia aktywność: </b> {{ users.last_login }}<br></li>
+                <li><b>Data założenia konta: </b> {{ users.date_joined }}</li>
+                {% endif %}
                 </lu>
 
                   <a name ="edit" value="1" href="/changedateuser/{{ users.id }}/" class="btn btn-danger rounded-0 text-light m-1">Edytuj dane</a>
