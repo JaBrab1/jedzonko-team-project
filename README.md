@@ -1,81 +1,193 @@
 
+# Jedzonko — Meal Planning Web Application
 
-# ScrumLab
+**Team Project | Coders Lab Python Developer Course | 2022**
 
-## Czym jest ScrumLab?
+## About the Project
 
-ScrumLab to projekt, którego celem jest nauczenie Cię pracy w zespole programistów.  Symuluje on realne zadania
-w projekcie aplikacji webowej. Podczas tego tygodnia będziesz uczestniczyć w codziennych spotkaniach, rozwiązywać
-problemy, robić *code review* i integrować swój kod z kodem kolegów.
+Jedzonko is a web application developed using Python and Django as part of a team project during the Coders Lab Python Developer course.
 
-ScrumLab będzie prowadzony inaczej niż pozostałe zajęcia w CodersLab. Udział wykładowcy powinien być tu jak najmniejszy, idealnie byłoby, gdyby zjawiał się tylko aby sprawdzić postępy - na tych zajęciach szlifujemy umiejętności dzielenia się wiedzą między uczestnikami i jednoczesną pracę nad wspólnym kodem.
-Dodatkowo praca z repozytorium ma przypominać prawdziwy projekt — dlatego będzie się różnić od tego, jak wyglądała praca na ćwiczeniach. 
+The application allows users to manage cooking recipes, create meal plans, and organize meals into schedules.
 
-## Jak zacząć?
+The project was developed in a Scrum-based workflow, using Git, feature branches, pull requests, and collaborative code integration.
 
-1. Sklonuj repozytorium na swój komputer. Użyj do tego komendy `git clone adres_repozytorium`
-Adres repozytorium możesz znaleźć na stronie repozytorium po naciśnięciu w guzik "Clone or download".
-2. Stwórz branch na zadanie, które będziesz rozwiązywał. Użyj do tego komendy: `git checkout -b nr-zadania/opis`.
-Na przykład: `git checkout -b zadanie2.1/menu-boczne`
-3. Rozwiąż zadanie i skomituj zmiany do repozytorium. Użyj do tego komend `git add nazwa_pliku`.
-Jeżeli chcesz dodać wszystkie zmienione pliki użyj `git add .`
-Pamiętaj że kropka na końcu jest ważna!
-Następnie skommituj zmiany komendą `git commit -m "nazwa_commita"`
-4. Wypchnij zmiany do repozytorium na GitHubie.  Użyj do tego komendy `git push origin main`
-5. Stwórz [*pull request*](https://help.github.com/articles/creating-a-pull-request) gdy skończysz zadanie.
-Jako `base` ustaw branch `main`, jako `compare` ustaw branch, który stworzyłeś w puncie `2`.
-6. Jeśli Twoje zmiany zostaną zaakceptowane przez resztę zespołu, wykonaj merge dołączając swoje zmiany
-do brancha `main`. Rozwiąż konflikty, jeśli zajdzie taka potrzeba.
-7. Powtarzaj punkty od `2` do `6`, aż wykonasz wszystkie zaplanowane zadania.
+This repository preserves the original development history from 2022.
 
-## Opis projektu
+## Features
 
-Pani Maria Iksińska napisała książkę kucharską, która stała się bestsellerem na rynku książek kucharskich w Polsce i zwróciła się do nas z prośba o przygotowanie dla jej czytelników aplikacji do planowania posiłków. Książka Pani Iksińskiej promuje zdrowe odżywianie i podkreśla jak ważną rolę odgrywa w nim planowanie posiłków. Chce zacząć przeprowadzać w całym kraju warsztaty, na których będzie uczyć uczestników planowania posiłków.
+The application includes:
 
-Pani Maria chce rozwijać swój biznes, a do zrealizowania swoich celów potrzebuje strony-wizytówki oraz prostej aplikacji do planowania posiłków.
+- Browsing recipes and viewing recipe details
+- Adding, editing, and deleting recipes
+- Creating and managing meal plans
+- Assigning recipes to meal schedules
+- Displaying meal plans on a dashboard
+- Recipe voting and paginated recipe listings
+- Basic user account and authentication functionality
 
-## Plan tego repozytorium
-* `scrumlab` – katalog z projektem Django. Znajdują się w nim pliki
-  - `settings.py` – ustawienia projektu,
-  - `urls.py` – dane URL-i,
-  - `local_settings.py.example` – ustawienia lokalne; po szczegóły zajrzyj do rozdziału **Konfiguracja projektu**,
-* `jedzonko` – katalog aplikacji Django, nad którą będziesz pracował.
-* `static` – katalog z plikami statycznymi; po szczegóły zajrzyj do rozdziału **Konfiguracja projektu**
+These features represent the combined work of the development team.
 
-## Konfiguracja projektu
+## Technologies
 
-### Co skonfigurowaliśmy za Ciebie?
-- szablony
-  - umieszczaj je w aplikacji **jedzonko** w katalogu **templates**,
-- pliki statyczne
-  - pliki statyczne (czyli wszystkie pliki, które są serwowane przez aplikację: obrazki, pliki CSS, JS itp.)
-  umieszczaj w katalogu **static**, który znajduje się w głównym katalogu projektu.
+**Backend**
+- Python
+- Django 2.2.6
+- Django ORM
 
-### Czego nie skonfigurowaliśmy?
-- bazy danych (ze względów bezpieczeństwa)
+**Database**
+- PostgreSQL
+- SQL
 
-**Pamiętaj:** nie należy trzymać danych wrażliwych pod kontrolą Gita! Takimi danymi wrażliwymi
-są m. in. dane do połączenia z bazą danych. Te dane trzymamy w pliku **local_settings.py**,
-którego nie znajdziesz w tym repozytorium (plik jest dodany do **.gitignore**)!
+**Frontend**
+- HTML
+- CSS
+- JavaScript
+- Django Templates
 
-Zajrzyj do pliku **settings.py**, znajdziesz w nim następującą sekcję:
+**Development and Collaboration**
+- Git
+- GitHub
+- Scrum
+- Feature branches
+- Pull requests
 
-```python
-try:
-    from scrumlab.local_settings import DATABASES
-except ModuleNotFoundError:
-    print("Brak konfiguracji bazy danych w pliku local_settings.py!")
-    print("Uzupełnij dane i spróbuj ponownie!")
-    exit(0)
+## My Contributions
+
+**Bartosz — GitHub: JaBrab1 / BartoszIkwanty**
+
+My responsibilities focused primarily on Django backend development and integration with the application's frontend templates.
+
+Based on the original Git commit history, my contributions included:
+
+- Implementing Django views and URL routing
+- Developing dashboard-related functionality
+- Working on the `Plan` data model and database migrations
+- Retrieving and filtering data using Django ORM
+- Implementing meal plan detail views
+- Developing recipe editing functionality, including handling form submissions and updating database records
+- Integrating backend functionality with HTML templates
+- Participating in code integration and collaborative development
+
+### Selected Commits
+
+The following commits document examples of my work:
+
+- [3a115cd](../../commit/3a115cd) — Initial dashboard implementation
+- [64212b3](../../commit/64212b3) — Django views and URL routing
+- [f5ac606](../../commit/f5ac606) — Dashboard data integration
+- [20f0024](../../commit/20f0024) — Meal plan model and related changes
+- [53dc4bb](../../commit/53dc4bb) — Recipe editing functionality
+- [5430bc1](../../commit/5430bc1) — Recipe editing improvements
+
+The project was developed collaboratively. The contributions listed above reflect my documented work rather than ownership of the entire application.
+
+## Project Structure
+
+```text
+Jedzonko/
+├── jedzonko/           # Django application
+│   ├── models.py       # Database models
+│   ├── views.py        # Application views
+│   └── migrations/     # Database migrations
+├── scrumlab/           # Django project configuration
+├── static/             # CSS, JavaScript and static assets
+├── manage.py           # Django management script
+└── requirements.txt    # Project dependencies
 ```
 
-Oznacza to, że Django podczas każdego uruchomienia będzie próbowało zaimportować
-stałą `DATABASES` z pliku **local_settings.py**. Tam trzymaj dane do połączenia.
-Nie umieszczaj tego pliku pod kontrolą Gita. Aby ułatwić Ci pracę, przygotowaliśmy
-plik **local_settings.py.example**, w którym znajdziesz przygotowane odpowiednie dane.
-Wystarczy tylko, że zmienisz plikowi **local_settings.py.example** nazwę na  **local_settings.py**
-i uzupełnisz go.
+## Installation and Setup
 
----
+This is a legacy educational project from 2022. It uses older versions of Python/Django dependencies and has not been verified in a modern environment.
 
-Jeśli wszystko skonfigurowałeś poprawnie, to pod adresem http://localhost:8000/index zobaczysz przykładową stronę.
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/JaBrab1/jedzonko-team-project.git
+cd jedzonko-team-project
+```
+
+### 2. Create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+Activate the environment:
+
+Windows:
+```bash
+.venv\Scripts\activate
+```
+
+Linux/macOS:
+```bash
+source .venv/bin/activate
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configure the database
+
+The application expects database settings in `scrumlab/local_settings.py`.
+
+Create this file and configure your local PostgreSQL connection:
+
+```python
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "jedzonko",
+        "USER": "your_local_db_user",
+        "PASSWORD": "your_local_db_password",
+        "HOST": "localhost",
+        "PORT": "5432",
+    }
+}
+```
+
+### 5. Run database migrations
+
+```bash
+python manage.py migrate
+```
+
+### 6. Start the development server
+
+```bash
+python manage.py runserver
+```
+
+Open `http://127.0.0.1:8000/` in your browser.
+
+Additional configuration or sample records may be necessary. These instructions have not been verified against current dependency versions.
+
+## Team Collaboration
+
+The application was created as a collaborative project during the Coders Lab Python Developer course in 2022.
+
+Development followed a Scrum-style workflow, including task distribution, feature branches, pull requests, and code integration.
+
+The original Git history has been preserved to document the development process and contributions of the team members.
+
+## Credits
+
+- **Coders Lab** — Course materials and initial project resources
+- **Project team** — Collaborative application development
+
+[Original team repository](https://github.com/CodersLab/WAR_SPY_S_294_ScrumLab)
+
+[Original course instructions](CODERSLAB_INSTRUCTIONS.md)
+
+[View commit history](../../commits/main)
+
+## Project Status
+
+**Archived educational project — 2022**
+
+This repository is maintained as part of my programming portfolio to demonstrate my early experience with Django, database operations, backend development, and teamwork.
+
+The application is not production-ready and would require dependency updates, configuration improvements, and a security review before deployment.
